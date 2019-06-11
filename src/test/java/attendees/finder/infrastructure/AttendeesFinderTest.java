@@ -2,15 +2,14 @@ package attendees.finder.infrastructure;
 
 import attendees.finder.domain.Attendee;
 import attendees.finder.domain.Attendees;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("The attendees finder should return")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AttendeesFinderTest {
 
     private static final Attendee MARC = Attendee.withFirstName("Marc");
@@ -19,7 +18,7 @@ class AttendeesFinderTest {
 
     private Attendees attendees;
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
 
         attendees = new InMemoryAttendeesRepository();
