@@ -18,7 +18,7 @@ public class InMemoryAttendeesRepository implements Attendees {
     @Override
     public List<Attendee> findByInfixOfFirstName(String query) {
         List<Attendee> result = new ArrayList<>();
-        final BiPredicate<String, Attendee> predicate = (q, attendee) -> matches(q, attendee);
+        final BiPredicate<String, Attendee> predicate = this::matches;
         for (Attendee attendee : attendees) {
             addIf(predicate, query, result, attendee);
         }
