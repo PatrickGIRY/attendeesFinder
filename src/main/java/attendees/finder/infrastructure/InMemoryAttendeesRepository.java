@@ -19,11 +19,15 @@ public class InMemoryAttendeesRepository implements Attendees {
     public List<Attendee> findByInfixOfFirstName(String query) {
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
-            if (matches(query, attendee)) {
-                result.add(attendee);
-            }
+            addIfMatches(query, result, attendee);
         }
         return result;
+    }
+
+    private void addIfMatches(String query, List<Attendee> result, Attendee attendee) {
+        if (matches(query, attendee)) {
+            result.add(attendee);
+        }
     }
 
     private boolean matches(String query, Attendee attendee) {
