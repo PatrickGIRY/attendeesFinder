@@ -4,8 +4,8 @@ import attendees.finder.domain.Attendee;
 import attendees.finder.domain.Attendees;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.BiPredicate;
 
 public class InMemoryAttendeesRepository implements Attendees {
     private final List<Attendee> attendees = new ArrayList<>();
@@ -18,14 +18,15 @@ public class InMemoryAttendeesRepository implements Attendees {
     @Override
     public List<Attendee> findByInfixOfFirstName(String query) {
         List<Attendee> result = new ArrayList<>();
+        final BiPredicate<String, Attendee> predicate = (q, attendee) -> matches(q, attendee);
         for (Attendee attendee : attendees) {
-            addIfMatches(query, result, attendee);
+            addIf(predicate, query, result, attendee);
         }
         return result;
     }
 
-    private void addIfMatches(String query, List<Attendee> result, Attendee attendee) {
-        if (matches(query, attendee)) {
+    private void addIf(BiPredicate<String, Attendee> predicate, String query, List<Attendee> result, Attendee attendee) {
+        if (predicate.test(query, attendee)) {
             result.add(attendee);
         }
     }
