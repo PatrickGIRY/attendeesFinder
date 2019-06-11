@@ -22,14 +22,17 @@ public class InMemoryAttendeesRepository implements Attendees {
         final BiPredicate<String, Attendee> predicate = this::matches;
         final Consumer<Attendee> append = result::add;
         for (Attendee attendee : attendees) {
-            addIf(predicate, query, result, attendee, append);
+            final var consumer = addIf(predicate, query, result, attendee, append);
+            consumer.accept(attendee);
         }
         return result;
     }
 
-    private void addIf(BiPredicate<String, Attendee> predicate, String query, List<Attendee> result, Attendee attendee, Consumer<Attendee> append) {
+    private Consumer<Attendee> addIf(BiPredicate<String, Attendee> predicate, String query, List<Attendee> result, Attendee attendee, Consumer<Attendee> append) {
         if (predicate.test(query, attendee)) {
-            append.accept(attendee);
+            return append;
+        } else {
+            return attendee1 -> {};
         }
     }
 
