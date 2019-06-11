@@ -20,7 +20,7 @@ public class InMemoryAttendeesRepository implements Attendees {
     public List<Attendee> findByInfixOfFirstName(String query) {
         List<Attendee> result = new ArrayList<>();
         final BiPredicate<String, Attendee> predicate = this::matches;
-        final Consumer<Attendee> append = attendee -> result.add(attendee);
+        final Consumer<Attendee> append = result::add;
         for (Attendee attendee : attendees) {
             addIf(predicate, query, result, attendee, append);
         }
