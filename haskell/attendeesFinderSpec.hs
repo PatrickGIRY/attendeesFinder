@@ -1,8 +1,12 @@
 import Test.Hspec
+import Data.List (isInfixOf)
 
 data Attendee = Attendee {
      firstName :: String
 } deriving (Show, Eq)
+
+findByInfixOfFirstName query attendees = filter (matches query) attendees
+    where matches query attendee = query `isInfixOf` (firstName attendee)
 
 main = hspec $ do
     let attendees = [Attendee { firstName = "Marc" }, 
