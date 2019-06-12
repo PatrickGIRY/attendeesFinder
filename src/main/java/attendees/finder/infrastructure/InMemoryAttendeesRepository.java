@@ -25,16 +25,12 @@ public class InMemoryAttendeesRepository implements Attendees {
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
             if (predicate.test(attendee)) {
-                result = concat(attendee, result);
+                var newAttendees = new ArrayList<>(result);
+                newAttendees.add(attendee);
+                result = newAttendees;
             }
         }
         return result;
-    }
-
-    private List<Attendee> concat(Attendee attendee, List<Attendee> attendees) {
-        var newAttendees = new ArrayList<>(attendees);
-        newAttendees.add(attendee);
-        return newAttendees;
     }
 
     private Predicate<Attendee> matches(String query) {
