@@ -47,7 +47,7 @@ class AttendeesFinderTest {
     }
 
     @Test
-    @DisplayName("all the results when many attendees first names matche the query string")
+    @DisplayName("all the results when many attendees first names match the query string")
     void many_attendees_matche() {
 
         List<Attendee> result = attendees.findByInfixOfFirstName("hri");
