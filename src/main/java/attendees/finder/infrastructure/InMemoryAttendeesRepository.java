@@ -5,7 +5,7 @@ import attendees.finder.domain.Attendees;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 public class InMemoryAttendeesRepository implements Attendees {
@@ -18,21 +18,27 @@ public class InMemoryAttendeesRepository implements Attendees {
 
     @Override
     public List<Attendee> findByInfixOfFirstName(String query) {
-        List<Attendee> result = new ArrayList<>();
         final Predicate<Attendee> predicate = matches(query);
-        final Consumer<Attendee> append = result::add;
+        final BiFunction<Attendee, List<Attendee>, List<Attendee>> concat = this::concat;
+        List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
-            final var consumer = addIf(predicate, attendee, append);
-            consumer.accept(attendee);
+            final var fn = addIf(predicate, attendee, concat);
+            result = fn.apply(attendee, result);
         }
         return result;
     }
 
-    private Consumer<Attendee> addIf(Predicate<Attendee> predicate, Attendee attendee, Consumer<Attendee> append) {
+    private List<Attendee> concat(Attendee attendee, List<Attendee> attendees) {
+        var newAttendees = new ArrayList<>(attendees);
+        newAttendees.add(attendee);
+        return newAttendees;
+    }
+
+    private BiFunction<Attendee, List<Attendee>, List<Attendee>> addIf(Predicate<Attendee> predicate, Attendee attendee, BiFunction<Attendee, List<Attendee>, List<Attendee>> concat) {
         if (predicate.test(attendee)) {
-            return append;
+            return concat;
         } else {
-            return attendee1 -> {};
+            return (attendee1, attendees) -> attendees;
         }
     }
 
