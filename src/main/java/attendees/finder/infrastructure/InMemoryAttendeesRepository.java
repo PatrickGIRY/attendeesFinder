@@ -5,7 +5,6 @@ import attendees.finder.domain.Attendees;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class InMemoryAttendeesRepository implements Attendees {
@@ -23,16 +22,11 @@ public class InMemoryAttendeesRepository implements Attendees {
     }
 
     private List<Attendee> filter(Predicate<Attendee> predicate) {
-        final Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat = attendee -> attendees -> concat(attendee, attendees);
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
-            Function<List<Attendee>, List<Attendee>> result1;
             if (predicate.test(attendee)) {
-                result1 = concat.apply(attendee);
-            } else {
-                result1 = attendees1 -> attendees1;
+                result = concat(attendee, result);
             }
-            result = result1.apply(result);
         }
         return result;
     }
