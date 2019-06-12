@@ -21,7 +21,7 @@ public class InMemoryAttendeesRepository implements Attendees {
         return filter(predicate, attendees);
     }
 
-    private List<Attendee> filter(Predicate<Attendee> predicate, List<Attendee> attendees) {
+    private static List<Attendee> filter(Predicate<Attendee> predicate, List<Attendee> attendees) {
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
             if (predicate.test(attendee)) {
