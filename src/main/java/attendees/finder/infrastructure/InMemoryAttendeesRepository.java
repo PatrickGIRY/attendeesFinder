@@ -6,6 +6,7 @@ import attendees.finder.domain.Attendees;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class InMemoryAttendeesRepository implements Attendees {
     private final List<Attendee> attendees = new ArrayList<>();
@@ -21,13 +22,7 @@ public class InMemoryAttendeesRepository implements Attendees {
     }
 
     private static List<Attendee> filter(Predicate<Attendee> predicate, List<Attendee> attendees) {
-        List<Attendee> result = new ArrayList<>();
-        for (Attendee attendee : attendees) {
-            if (predicate.test(attendee)) {
-                result.add(attendee);
-            }
-        }
-        return result;
+        return attendees.stream().filter(predicate).collect(Collectors.toList());
     }
 
     private Predicate<Attendee> matches(String query) {
