@@ -22,8 +22,7 @@ public class InMemoryAttendeesRepository implements Attendees {
         final Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat = attendee -> attendees -> concat(attendee, attendees);
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
-            final var fn = addIf(predicate, attendee, concat);
-            result = fn.apply(result);
+            result = addIf(predicate, attendee, concat).apply(result);
         }
         return result;
     }
