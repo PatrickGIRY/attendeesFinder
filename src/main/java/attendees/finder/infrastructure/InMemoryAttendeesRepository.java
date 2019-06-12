@@ -5,8 +5,8 @@ import attendees.finder.domain.Attendees;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class InMemoryAttendeesRepository implements Attendees {
     private final List<Attendee> attendees = new ArrayList<>();
@@ -19,24 +19,24 @@ public class InMemoryAttendeesRepository implements Attendees {
     @Override
     public List<Attendee> findByInfixOfFirstName(String query) {
         List<Attendee> result = new ArrayList<>();
-        final BiPredicate<String, Attendee> predicate = this::matches;
+        final Predicate<Attendee> predicate = matches(query);
         final Consumer<Attendee> append = result::add;
         for (Attendee attendee : attendees) {
-            final var consumer = addIf(predicate, query, attendee, append);
+            final var consumer = addIf(predicate, attendee, append);
             consumer.accept(attendee);
         }
         return result;
     }
 
-    private Consumer<Attendee> addIf(BiPredicate<String, Attendee> predicate, String query, Attendee attendee, Consumer<Attendee> append) {
-        if (predicate.test(query, attendee)) {
+    private Consumer<Attendee> addIf(Predicate<Attendee> predicate, Attendee attendee, Consumer<Attendee> append) {
+        if (predicate.test(attendee)) {
             return append;
         } else {
             return attendee1 -> {};
         }
     }
 
-    private boolean matches(String query, Attendee attendee) {
-        return attendee.isFirstNameInfixOf(query);
+    private Predicate<Attendee> matches(String query) {
+        return attendee -> attendee.isFirstNameInfixOf(query);
     }
 }
