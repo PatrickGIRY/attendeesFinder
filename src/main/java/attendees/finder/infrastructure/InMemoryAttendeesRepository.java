@@ -26,7 +26,13 @@ public class InMemoryAttendeesRepository implements Attendees {
         final Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat = attendee -> attendees -> concat(attendee, attendees);
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
-            result = addIf(predicate, attendee, concat).apply(result);
+            Function<List<Attendee>, List<Attendee>> result1;
+            if (predicate.test(attendee)) {
+                result1 = concat.apply(attendee);
+            } else {
+                result1 = attendees1 -> attendees1;
+            }
+            result = result1.apply(result);
         }
         return result;
     }
@@ -35,14 +41,6 @@ public class InMemoryAttendeesRepository implements Attendees {
         var newAttendees = new ArrayList<>(attendees);
         newAttendees.add(attendee);
         return newAttendees;
-    }
-
-    private Function<List<Attendee>, List<Attendee>> addIf(Predicate<Attendee> predicate, Attendee attendee, Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat) {
-        if (predicate.test(attendee)) {
-            return concat.apply(attendee);
-        } else {
-            return attendees -> attendees;
-        }
     }
 
     private Predicate<Attendee> matches(String query) {
