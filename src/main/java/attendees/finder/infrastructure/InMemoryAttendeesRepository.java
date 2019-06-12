@@ -23,7 +23,7 @@ public class InMemoryAttendeesRepository implements Attendees {
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
             final var fn = addIf(predicate, attendee, concat);
-            result = fn.apply(attendee).apply(result);
+            result = fn.apply(result);
         }
         return result;
     }
@@ -34,11 +34,11 @@ public class InMemoryAttendeesRepository implements Attendees {
         return newAttendees;
     }
 
-    private Function<Attendee, Function<List<Attendee>, List<Attendee>>> addIf(Predicate<Attendee> predicate, Attendee attendee, Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat) {
+    private Function<List<Attendee>, List<Attendee>> addIf(Predicate<Attendee> predicate, Attendee attendee, Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat) {
         if (predicate.test(attendee)) {
-            return concat;
+            return concat.apply(attendee);
         } else {
-            return attendee1 -> attendees -> attendees;
+            return attendees -> attendees;
         }
     }
 
