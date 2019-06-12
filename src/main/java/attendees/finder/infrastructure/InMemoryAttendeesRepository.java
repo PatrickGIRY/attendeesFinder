@@ -25,9 +25,7 @@ public class InMemoryAttendeesRepository implements Attendees {
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
             if (predicate.test(attendee)) {
-                var newAttendees = new ArrayList<>(result);
-                newAttendees.add(attendee);
-                result = newAttendees;
+                result.add(attendee);
             }
         }
         return result;
