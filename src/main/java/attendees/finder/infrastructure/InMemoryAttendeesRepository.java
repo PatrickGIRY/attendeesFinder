@@ -19,6 +19,10 @@ public class InMemoryAttendeesRepository implements Attendees {
     @Override
     public List<Attendee> findByInfixOfFirstName(String query) {
         final Predicate<Attendee> predicate = matches(query);
+        return filter(predicate);
+    }
+
+    private List<Attendee> filter(Predicate<Attendee> predicate) {
         final Function<Attendee, Function<List<Attendee>, List<Attendee>>> concat = attendee -> attendees -> concat(attendee, attendees);
         List<Attendee> result = new ArrayList<>();
         for (Attendee attendee : attendees) {
