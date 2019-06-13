@@ -2,7 +2,10 @@ package attendees.finder.infrastructure;
 
 import attendees.finder.domain.Attendee;
 import attendees.finder.domain.Attendees;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.List;
 
@@ -46,7 +49,7 @@ class AttendeesFinderTest {
     }
 
     @Test
-    @DisplayName("all the results when many attendees first names matche the query string")
+    @DisplayName("all the results when many attendees first names match the query string")
     void many_attendees_matche() {
 
         List<Attendee> result = attendees.findByInfixOfFirstName("hri");
